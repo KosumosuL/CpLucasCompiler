@@ -1,0 +1,51 @@
+<S> -> <start>
+<start> -> <external_declaration> <start>
+<start> -> @
+<external_declaration> -> <function_definition>
+<external_declaration> -> <declaration>
+<function_definition> -> <type> <identifier> ( <function_declaration_list> ) <compound_statement>
+<function_declaration_list> -> <function_declaration> <function_declaration_postfix>
+<function_declaration_list> -> @
+<function_declaration_postfix> -> , <function_declaration> <function_declaration_postfix>
+<function_declaration_postfix> -> @
+<function_declaration> -> <type> <identifier>
+<declaration> -> <type> <declaration_init> <declaration_init_list> ;
+<declaration> -> <declaration_init> <declaration_init_list> ;
+<declaration_init> -> <identifier> <declaration_assign>
+<declaration_assign> -> = <expression>
+<declaration_assign> -> @
+<declaration_init_list> -> , <declaration_init> <declaration_init_list>
+<declaration_init_list> -> @
+<statement> -> <selection_statement>
+<statement> -> <iteration_statement>
+<statement> -> <jump_statement>
+<statement> -> <compound_statement>
+<statement> -> <declaration>
+<statement> -> <comment>
+<statement> -> <expression> ;
+<selection_statement> -> if ( <expression> ) <statement> else <statement>
+<selection_statement> -> if ( <expression> ) <statement>
+<iteration_statement> -> for ( <declaration> <expression> ; <expression> ) <statement>
+<iteration_statement> -> while ( <expression> ) <statement>
+<jump_statement> -> continue ;
+<jump_statement> -> break ;
+<jump_statement> -> return <expression> ;
+<compound_statement> -> { <statement_list> }
+<statement_list> -> <statement> <statement_list>
+<statement_list> -> @
+<expression> -> <constant_expression>
+<expression> -> <function_expression>
+<constant_expression> -> <primary_expression> <arithmetic_expression>
+<primary_expression> -> <unary_operator> <primary_expression>
+<primary_expression> -> <identifier>
+<primary_expression> -> <constnumber>
+<primary_expression> -> <constliteral>
+<primary_expression> -> <const>
+<primary_expression> -> ( <expression> )
+<arithmetic_expression> -> <binary_operator> <primary_expression> <arithmetic_expression>
+<arithmetic_expression> -> @
+<function_expression> -> <identifier> ( <expression_list> )
+<expression_list> -> <expression> <postfix_expression>
+<expression_list> -> @
+<postfix_expression> -> , <expression> <postfix_expression>
+<postfix_expression> -> @
