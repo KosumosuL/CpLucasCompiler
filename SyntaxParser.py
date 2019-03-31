@@ -46,23 +46,23 @@ class Item(object):
         prod = copy.deepcopy(start)
         queue = copy.deepcopy(start)
         while len(queue):
-            tmpqueue = copy.deepcopy(queue)
-            for lhs, rhs, la in tmpqueue:
-                queue.pop(0)
-                pos = rhs.index('.')
-                if pos < len(rhs) - 1:
-                    if rhs[pos + 1] in NONTERMINAL:
-                        newla = get_lookahead(([] if pos == len(rhs) - 2 else rhs[pos + 2:]), la)
-                        for plhs, prhs in PRODUCTION:
-                            if plhs == rhs[pos + 1]:
-                                if prhs == ['@']:
-                                    tmp = ['.']
-                                else:
-                                    tmp = copy.deepcopy(prhs)
-                                    tmp.insert(0, '.')
-                                if [plhs, tmp, newla] not in prod:
-                                    prod.append([plhs, tmp, newla])
-                                    queue.append([plhs, tmp, newla])
+            # tmpqueue = copy.deepcopy(queue)
+            # for lhs, rhs, la in tmpqueue:
+            lhs, rhs, la = queue.pop(0)
+            pos = rhs.index('.')
+            if pos < len(rhs) - 1:
+                if rhs[pos + 1] in NONTERMINAL:
+                    newla = get_lookahead(([] if pos == len(rhs) - 2 else rhs[pos + 2:]), la)
+                    for plhs, prhs in PRODUCTION:
+                        if plhs == rhs[pos + 1]:
+                            if prhs == ['@']:
+                                tmp = ['.']
+                            else:
+                                tmp = copy.deepcopy(prhs)
+                                tmp.insert(0, '.')
+                            if [plhs, tmp, newla] not in prod:
+                                prod.append([plhs, tmp, newla])
+                                queue.append([plhs, tmp, newla])
         # make lookahead gathered
         for i in range(len(prod)):
             for j in range(i + 1, len(prod)):
@@ -108,9 +108,12 @@ def preprocess(path):
         # print(NULLABLE)
 
     def getFirst():
+        mem = dict()
         for n in NONTERMINAL:
             FIRST[n] = set()
         def recur_get_first(tar):
+            if tar in mem:
+                return mem[tar]
             for [lhs, rhs] in PRODUCTION:
                 if lhs == tar:
                     for c in rhs:
@@ -122,6 +125,7 @@ def preprocess(path):
                             FIRST[lhs] |= FIRST[c]
                             if c not in NULLABLE:
                                 FIRST[lhs] -= {'@'}
+                                mem[lhs] = copy.deepcopy(FIRST[lhs])
                                 break
         for n in NONTERMINAL:
             recur_get_first(n)
@@ -159,9 +163,11 @@ def getSynParser(target):
                     ITEMList.append(tmp)
                     queue.append(tmp)
                 item.next[key] = ITEMList.index(tmp)
-        # for idx in range(len(ITEMList)):
-        #     print(idx)
-        #     print(ITEMList[idx])
+
+        if DEBUG:
+            for idx in range(len(ITEMList)):
+                print(idx)
+                print(ITEMList[idx])
 
     def getTable():
         for idx in range(len(ITEMList)):
@@ -221,6 +227,10 @@ def getSynParser(target):
                 return 'ACCEPT'
             else:
                 return 'ERROR'
+
+            if DEBUG:
+                print(charStack)
+                print(stateStack)
 
     try:
         LR1Parsing()

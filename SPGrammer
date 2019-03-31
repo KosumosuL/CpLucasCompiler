@@ -3,6 +3,7 @@
 <start> -> @
 <external_declaration> -> <function_definition>
 <external_declaration> -> <declaration>
+<external_declaration> -> <comment>
 <function_definition> -> <type> <identifier> ( <function_declaration_list> ) <compound_statement>
 <function_declaration_list> -> <function_declaration> <function_declaration_postfix>
 <function_declaration_list> -> @

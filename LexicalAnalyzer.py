@@ -106,15 +106,12 @@ def preprocess(path):
         ans = copy.deepcopy(src)
         queue = list(ans)
         while len(queue):
-            tmpqueue = copy.deepcopy(queue)
-            for s in tmpqueue:
-                queue.pop(0)
-                if s in f and '@' in f[s]:
-                    for tar in f[s]['@']:
-                        if tar not in ans:
-                            queue.append(tar)
-                            ans.add(tar)
-
+            s = queue.pop(0)
+            if s in f and '@' in f[s]:
+                for tar in f[s]['@']:
+                    if tar not in ans:
+                        queue.append(tar)
+                        ans.add(tar)
         return ans
 
     def move(src, f, ed):
@@ -122,12 +119,10 @@ def preprocess(path):
         for s in src:
             if s in f:
                 if ed in f[s]:
-                    if tar | f[s][ed] != tar:
-                        tar |= f[s][ed]
+                    tar |= f[s][ed]
         return tar
 
     def nfa2dfa(N, T, F, S, Z):
-        import copy
         DN, DT, DF, DS, DZ = [], T, dict(), set(), set()
         queue = []
 
@@ -135,20 +130,17 @@ def preprocess(path):
         DN.append(t)
         queue.append(t)
         while len(queue):
-            tmpqueue = copy.deepcopy(queue)
-            for p in tmpqueue:
-                queue.pop(0)
-                # 正规文法转换的NFA终态一定无出边
-                if DN.index(p) not in DF:
-                    DF[DN.index(p)] = dict()
-                for a in T:
-                    tnext = ep_closure(move(p, F, a), F)
-                    if len(tnext) == 0:
-                        continue
-                    if tnext not in DN:
-                        DN.append(tnext)
-                        queue.append(tnext)
-                    DF[DN.index(p)][a] = DN.index(tnext)
+            p = queue.pop(0)
+            if DN.index(p) not in DF:   # 正规文法转换的NFA终态一定无出边
+                DF[DN.index(p)] = dict()
+            for a in T:
+                tnext = ep_closure(move(p, F, a), F)
+                if len(tnext) == 0:
+                    continue
+                if tnext not in DN:
+                    DN.append(tnext)
+                    queue.append(tnext)
+                DF[DN.index(p)][a] = DN.index(tnext)
 
         for p in DN:
             for s in S:
@@ -221,9 +213,12 @@ def getLexAnalysis(path, DFA):
     try:
         with open(path, 'r') as f:
             code = f.read()
+            code += '\n'
             res = []
             while True:
                 ans = scan()
+                if DEBUG:
+                    print(ans)
                 if ans == 'END':
                     break
                 elif ans == 'ERROR':

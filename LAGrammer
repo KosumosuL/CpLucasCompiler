@@ -62,10 +62,6 @@
 <X> -> n<Y>
 <Y> -> g
 ###
-<keyword> -> m<A>
-<A> -> a<B>
-<B> -> i<C>
-<C> -> n
 <keyword> -> r<D>
 <D> -> e<E>
 <E> -> t<F>
@@ -75,8 +71,6 @@
 <keyword> -> f<I>
 <I> -> o<J>
 <J> -> r
-<keyword> -> d<K>
-<K> -> o
 <keyword> -> w<L>
 <L> -> h<M>
 <M> -> i<N>
@@ -142,15 +136,8 @@
 <constnumber> -> 7<B>
 <constnumber> -> 8<B>
 <constnumber> -> 9<B>
-<constnumber> -> -1<B>
-<constnumber> -> -2<B>
-<constnumber> -> -3<B>
-<constnumber> -> -4<B>
-<constnumber> -> -5<B>
-<constnumber> -> -6<B>
-<constnumber> -> -7<B>
-<constnumber> -> -8<B>
-<constnumber> -> -9<B>
+<constnumber> -> -<A>
+<A> -> <digit><B>
 <B> -> <digit><B>
 <B> -> .<C>
 <C> -> <digit><E>
